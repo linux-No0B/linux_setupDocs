@@ -1,0 +1,33 @@
+# Wireless adapter troubleshooting steps for broadcom B43* adapters
+
+# Most helpful URL: https://help.ubuntu.com/community/WifiDocs/Driver/bcm43xx 
+
+
+# Step 1: Install the bcmwl-kernel 
+
+sudo apt-get update
+sudo apt-get --reinstall install bcmwl-kernel-source
+
+
+# Step 2: remove the other broadcom drivers and call the wl driver 
+
+sudo modprobe -r b43 ssb wl brcmfmac brcmsmac bcma
+sudo modprobe wl
+
+
+# Step 3: Update the blacklists in the /etc/modprobe.d directory to blacklist the other broadcom drivers
+
+blacklist b43
+blacklist b43legacy
+blacklist ssb
+blacklist bcm43xx
+blacklist brcm80211
+blacklist brcmfmac
+blacklist brcmsmac
+
+
+# Step 4: Add 'wl' and any dependecies of 'wl' to the etc/modules symlink (symliked to etc/modules-load/modules.conf
+
+# Step 5: update the initram with the changes (so that same steps don't need to be repeated with every reboot.)
+
+update-initramfs -u
